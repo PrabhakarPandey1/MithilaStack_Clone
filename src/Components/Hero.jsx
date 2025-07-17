@@ -204,7 +204,7 @@ const Hero = () => {
   return (
     <section
       ref={heroRef}
-      className="max-w-7xl mx-auto h-auto px-6 md:px-12 py-16 text-white font-sans gap-8 relative overflow-hidden"
+      className="max-w-7xl mx-auto h-auto pt-24 px-6 md:px-12 py-16 text-white font-sans gap-8 relative overflow-hidden"
     >
       <div className="flex flex-col lg:flex-row justify-center min-h-screen">
         {/* Left Section */}

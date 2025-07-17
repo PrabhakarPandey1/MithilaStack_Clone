@@ -4,18 +4,20 @@ import Logo from "../images/mithilaLogo.svg";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const lettersRef = useRef([]);
-  const brandRef = useRef(null); // wrapper for hover event
+  const brandRef = useRef(null);
   const text = "MithilaStack";
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  // Initial animation on load
+  // Animate on load
   useEffect(() => {
     animateLetters();
   }, []);
 
-  // Animate function
+  // Animate brand text letters
   const animateLetters = () => {
     gsap.fromTo(
       lettersRef.current,
@@ -30,7 +32,7 @@ const Navbar = () => {
     );
   };
 
-  // Re-animate on hover
+  // Animate again on hover
   useEffect(() => {
     const el = brandRef.current;
     if (!el) return;
@@ -40,16 +42,29 @@ const Navbar = () => {
     };
 
     el.addEventListener("mouseenter", handleMouseEnter);
+    return () => el.removeEventListener("mouseenter", handleMouseEnter);
+  }, []);
 
-    return () => {
-      el.removeEventListener("mouseenter", handleMouseEnter);
+  // Scroll effect to make navbar fixed with new color
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
     };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="bg-[#0c0e20] text-white px-6 md:px-12 py-4 shadow-md">
+    <header
+      className={`z-50 px-6 md:px-12 py-4 shadow-md transition-all duration-300 ${
+        isScrolled
+          ? "fixed top-0 w-full bg-slate-900 text-white"
+          : "bg-[#0c0e20] text-white"
+      }`}
+    >
       <div className="flex justify-between items-center">
-        {/* Logo + Animated Brand */}
+        {/* Logo + Brand Text */}
         <div
           ref={brandRef}
           className="flex items-center gap-2 text-2xl font-bold text-cyan-400 cursor-pointer"
@@ -70,7 +85,7 @@ const Navbar = () => {
           </span>
         </div>
 
-        {/* Desktop Nav */}
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
           <a href="/" className="hover:text-cyan-400 transition">Home</a>
           <a href="/services" className="hover:text-cyan-400 transition">Service</a>
